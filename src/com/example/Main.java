@@ -1,24 +1,27 @@
 package com.example;
 
-import javax.swing.*;
 import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Stream;
 
 public class Main {
 
     public static void main(String[] args) {
+        try {
+            convertCreateFile("C:\\Users\\quack\\Desktop\\Songs\\będę cię wielbił", "C:\\Users\\quack\\Desktop\\Songs_destination\\będę cię wielbił");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void convertCreateFile(String target, String destination) throws IOException {
         StringBuilder wholeText = new StringBuilder();
         String lines = "";
 
         try {
-            File myObj = new File("C:\\Users\\quack\\Desktop\\Songs\\będę cię wielbił");
+            File myObj = new File(target);
             Scanner myReader = new Scanner(myObj);
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();
@@ -59,8 +62,20 @@ public class Main {
             }
         }
 
+        StringBuilder finalTextStringSB = new StringBuilder();
         for (String line : textFinal) {
-            System.out.println(line);
+            finalTextStringSB.append(line+="\n");
         }
+        String finalTextString = String.valueOf(finalTextStringSB);
+
+        System.out.println(finalTextString);
+
+        wholeText.replace(wholeText.indexOf("<lyrics>")+8, wholeText.indexOf("</lyrics>"), finalTextString);
+        System.out.println(wholeText);
+
+        FileWriter finishFile = new FileWriter(destination);
+        finishFile.write(wholeText.toString());
+        finishFile.flush();
+        finishFile.close();
     }
 }
